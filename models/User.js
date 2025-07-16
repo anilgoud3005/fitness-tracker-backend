@@ -19,18 +19,34 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  gender: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  address: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  age: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  weight: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
+  height: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  weight: {
-  type: DataTypes.FLOAT,
-  allowNull: true,
-},
-height: {
-  type: DataTypes.FLOAT,
-  allowNull: true,
-},
 });
 
 module.exports = User;
