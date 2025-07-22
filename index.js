@@ -5,6 +5,7 @@ const sequelize = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const dietRoutes = require('./routes/dietRoutes');
 const activityRoutes = require('./routes/activityRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use('/api/diet', dietRoutes);
 app.use('/api/activity', activityRoutes);
+app.use('/api/user', userRoutes);
 
 const PORT = process.env.PORT || 5050;
 
