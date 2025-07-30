@@ -6,6 +6,8 @@ const authRoutes = require("./routes/authRoutes");
 const dietRoutes = require('./routes/dietRoutes');
 const activityRoutes = require('./routes/activityRoutes');
 const userRoutes = require('./routes/userRoutes');
+const goalRoutes = require('./routes/goalRoutes');
+const stepRoutes = require('./routes/stepRoutes')
 
 
 dotenv.config();
@@ -17,6 +19,8 @@ app.use("/api/auth", authRoutes);
 app.use('/api/diet', dietRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/goals', goalRoutes);
+app.use('/api', stepRoutes);
 
 const PORT = process.env.PORT || 5050;
 
