@@ -1,5 +1,7 @@
 const FitnessGoal = require('../models/FitnessGoal');
 const db = require('../config/db');
+const sequelize = require("../config/db");
+
 
 // Get all goals for a specific user
 exports.getGoalsByUser = async (req, res) => {
@@ -107,14 +109,19 @@ exports.getWeeklyProgress = async (req, res) => {
   try {
     // 👇 Ensure userId is passed as an array for proper binding
     const [goals] = await db.query(
-      `SELECT target_count, achieved_count, 
-              DATEDIFF(end_date, start_date) AS duration_days,
-              start_date, end_date
-       FROM fitness_goals 
-       WHERE user_id = ? 
-       ORDER BY start_date DESC 
-       LIMIT 1`,
-      [userId]
+      `
+  SELECT target_count, achieved_count, 
+         DATEDIFF(end_date, start_date) AS duration_days,
+         start_date, end_date
+  FROM fitness_goals 
+  WHERE user_id = :userId 
+  ORDER BY start_date DESC 
+  LIMIT 1
+  `,
+      {
+        replacements: { userId },
+        type: db.QueryTypes.SELECT
+      }
     );
 
     if (!goals.length) {
