@@ -107,40 +107,18 @@ exports.getWeeklyProgress = async (req, res) => {
   }
 
   try {
-    // 👇 Ensure userId is passed as an array for proper binding
-    const [goals] = await db.query(
-      `
-  SELECT target_count, achieved_count, 
-         DATEDIFF(end_date, start_date) AS duration_days,
-         start_date, end_date
-  FROM fitness_goals 
-  WHERE user_id = :userId 
-  ORDER BY start_date DESC 
-  LIMIT 1
-  `,
-      {
-        replacements: { userId },
-        type: db.QueryTypes.SELECT
-      }
-    );
+    const allGoals = await FitnessGoal.findAll({ where: { user_id: userId } });
 
-    if (!goals.length) {
-      return res.json({ progress: 0, streak: 0 });
-    }
+    const latest = allGoals.sort((a, b) => new Date(b.start_date) - new Date(a.start_date))[0];
+    const progress = latest
+      ? Math.min((latest.achieved_count / latest.target_count) * 100, 100)
+      : 0;
 
-    const goal = goals[0];
-    const progress = Math.min((goal.achieved_count / goal.target_count) * 100, 100);
-
-    // Fetch completed goals for streak
-    const [streaks] = await db.query(
-      `SELECT COUNT(*) AS streak FROM fitness_goals 
-       WHERE user_id = ? AND achieved_count >= target_count`,
-      [userId]
-    );
+    const streak = allGoals.filter(goal => goal.achieved_count >= goal.target_count).length;
 
     return res.json({
       progress,
-      streak: streaks[0].streak
+      streak
     });
   } catch (err) {
     console.error('Error calculating goal progress:', err);
